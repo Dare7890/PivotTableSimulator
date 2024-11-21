@@ -12,6 +12,7 @@ namespace PivotTableSimulatorUI
             FileCombiner.Combine(headerRawsAmount);
             SimulatorService.CreateTable(metaColumnsAmount, headerRawsAmount);
             HeaderService.ReplaceOnInit(metaColumnsAmount, headerRawsAmount);
+            ResourcesNormalizer.Normalize();
         }
 
         private static int GetHeaderRawsAmount()
