@@ -15,7 +15,11 @@ namespace PivotTableSimulator
 
             var sheet = wb.Worksheets[1];
             var mergedAreasList = sheet.Cells.GetMergedAreas();
-            Aspose.Cells.Range range = sheet.Cells.CreateRange(headerRawsAmount - 1, 0, sheet.Cells.MaxRow + (headerRawsAmount - 1), sheet.Cells.MaxColumn + 1);
+            var range = sheet.Cells.CreateRange(
+                firstRow: headerRawsAmount - 1,
+                firstColumn: 0,
+                totalRows: sheet.Cells.MaxRow + (headerRawsAmount - 1),
+                totalColumns: sheet.Cells.MaxColumn + 1);
 
             range.UnMerge();
             UnionSeveralCells(sheet, mergedAreasList);
@@ -24,12 +28,7 @@ namespace PivotTableSimulator
             var index = pivotTables.Add(range.RefersTo, row: headerRawsAmount - 1, column: 0, _pivotTableName);
 
             var pivotTable = pivotTables[index];
-
-            pivotTable.RowGrand = false;
-            pivotTable.ColumnGrand = false;
-            pivotTable.DataFieldHeaderName = string.Empty;
-            pivotTable.ShowDrill = false;
-            pivotTable.ShowRowHeaderCaption = false;
+            InitDefaultPivotTableSettings(pivotTable);
 
             for (int i = 0; i < metaColumnsRawsAmount; i++)
             {
@@ -49,13 +48,25 @@ namespace PivotTableSimulator
             wb.Save(Constants.PIVOT_TABLE_FILE_PATH);
         }
 
+        private static void InitDefaultPivotTableSettings(PivotTable pivotTable)
+        {
+            pivotTable.RowGrand = false;
+            pivotTable.ColumnGrand = false;
+            pivotTable.DataFieldHeaderName = string.Empty;
+            pivotTable.ShowDrill = false;
+            pivotTable.ShowRowHeaderCaption = false;
+        }
+
         private static void UnionSeveralCells(Worksheet sheet, CellArea[] mergedAreas)
         {
             foreach (var area in mergedAreas)
             {
                 var value = sheet.Cells[area.StartRow, area.StartColumn];
-                var areaRange = sheet.Cells.CreateRange(area.StartRow, area.StartColumn,
-                    area.EndRow + 1 - area.StartRow, area.EndColumn + 1 - area.StartColumn);
+                var areaRange = sheet.Cells.CreateRange(
+                    firstRow: area.StartRow,
+                    firstColumn: area.StartColumn,
+                    totalRows: area.EndRow + 1 - area.StartRow,
+                    totalColumns: area.EndColumn + 1 - area.StartColumn);
 
                 areaRange.PutValue(value.StringValue, false, false);
             }
@@ -64,10 +75,11 @@ namespace PivotTableSimulator
         private static void BuildMetaColumns(PivotTable pivotTable, int index)
         {
             pivotTable.AddFieldToArea(PivotFieldType.Row, index);
-            var rowField = pivotTable.RowFields[index];
 
+            var rowField = pivotTable.RowFields[index];
             rowField.IsAutoSort = true;
             rowField.IsAscendSort = true;
+
             rowField.SetSubtotals(PivotFieldSubtotalType.None, true);
         }
 

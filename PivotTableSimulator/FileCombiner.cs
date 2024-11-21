@@ -34,14 +34,16 @@
                     var sheetRowsAmount = resultBook.Worksheets[sheet.Name].Cells.Rows.Count;
 
                     var sourceRange = sheet.Cells.CreateRange(
-                        headerRawsAmount,
-                        firstColumn: 0, sheet.Cells.MaxDataRow - headerRawsAmount + 1, sheet.Cells.MaxDataColumn + 1);
+                        firstRow: headerRawsAmount,
+                        firstColumn: 0,
+                        totalRows: sheet.Cells.MaxDataRow - headerRawsAmount + 1,
+                        totalColumns: sheet.Cells.MaxDataColumn + 1);
 
                     var destRange = resultBook.Worksheets[sheet.Name].Cells.CreateRange(
-                        sheetRowsAmount,
+                        firstRow: sheetRowsAmount,
                         firstColumn: 0,
-                        sourceRange.RowCount,
-                        sourceRange.ColumnCount);
+                        totalRows: sourceRange.RowCount,
+                        totalColumns: sourceRange.ColumnCount);
 
                     destRange.Copy(sourceRange);
                 }

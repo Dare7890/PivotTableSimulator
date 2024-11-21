@@ -36,8 +36,17 @@ namespace PivotTableSimulator
             var mergedWb = new Workbook(Constants.MERGED_FILE_PATH);
             var mergedSheet = mergedWb.Worksheets[1];
 
-            var headerSourceRange = mergedSheet.Cells.CreateRange(0, 0, headerRawsAmount, mergedSheet.Cells.MaxColumn + 1);
-            var headerDestRange = destSheet.Cells.CreateRange(0, 0, headerRawsAmount, headerSourceRange.ColumnCount);
+            var headerSourceRange = mergedSheet.Cells.CreateRange(
+                firstRow: 0,
+                firstColumn: 0,
+                totalRows: headerRawsAmount,
+                totalColumns: mergedSheet.Cells.MaxColumn + 1);
+
+            var headerDestRange = destSheet.Cells.CreateRange(
+                firstRow: 0,
+                firstColumn: 0,
+                totalRows: headerRawsAmount,
+                totalColumns: headerSourceRange.ColumnCount);
 
             headerDestRange.Copy(headerSourceRange);
         }
@@ -46,9 +55,18 @@ namespace PivotTableSimulator
         {
             var mergedWb = new Workbook(Constants.PIVOT_TABLE_FILE_PATH);
             var mergedSheet = mergedWb.Worksheets[Constants.RESULT_SHEET_NAME];
-            var sourceRange = mergedSheet.Cells.CreateRange(0, 0, mergedSheet.Cells.MaxRow, mergedSheet.Cells.MaxColumn + 1);
 
-            var destRange = destSheet.Cells.CreateRange(0, 0, mergedSheet.Cells.MaxRow, mergedSheet.Cells.MaxColumn + 1);
+            var sourceRange = mergedSheet.Cells.CreateRange(
+                firstRow: 0,
+                firstColumn: 0,
+                totalRows: mergedSheet.Cells.MaxRow,
+                totalColumns: mergedSheet.Cells.MaxColumn + 1);
+
+            var destRange = destSheet.Cells.CreateRange(
+                firstRow: 0,
+                firstColumn: 0,
+                totalRows: mergedSheet.Cells.MaxRow,
+                totalColumns: mergedSheet.Cells.MaxColumn + 1);
 
             if (destSheet.PivotTables.Any())
             {
