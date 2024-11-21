@@ -6,8 +6,8 @@ namespace PivotTableSimulator
     {
         public static void ReplaceOnInit(int metaColumnsRawsAmount, int headerRawsAmount)
         {
-            var destWb = new Workbook(Constants.pivotTableFilePath);
-            var destSheet = destWb.Worksheets[0];
+            var destWb = new Workbook(Constants.PIVOT_TABLE_FILE_PATH);
+            var destSheet = destWb.Worksheets[Constants.RESULT_SHEET_NAME];
 
             CopyTable(destSheet);
             CopyHeader(destSheet, headerRawsAmount);
@@ -28,12 +28,12 @@ namespace PivotTableSimulator
                 }
             }
 
-            destWb.Save(Constants.pivotTableFilePath);
+            destWb.Save(Constants.PIVOT_TABLE_FILE_PATH);
         }
 
         private static void CopyHeader(Worksheet destSheet, int headerRawsAmount)
         {
-            var mergedWb = new Workbook(Constants.mergedFilePath);
+            var mergedWb = new Workbook(Constants.MERGED_FILE_PATH);
             var mergedSheet = mergedWb.Worksheets[1];
 
             var headerSourceRange = mergedSheet.Cells.CreateRange(0, 0, headerRawsAmount, mergedSheet.Cells.MaxColumn + 1);
@@ -44,8 +44,8 @@ namespace PivotTableSimulator
 
         private static void CopyTable(Worksheet destSheet)
         {
-            var mergedWb = new Workbook(Constants.pivotTableFilePath);
-            var mergedSheet = mergedWb.Worksheets[0];
+            var mergedWb = new Workbook(Constants.PIVOT_TABLE_FILE_PATH);
+            var mergedSheet = mergedWb.Worksheets[Constants.RESULT_SHEET_NAME];
             var sourceRange = mergedSheet.Cells.CreateRange(0, 0, mergedSheet.Cells.MaxRow, mergedSheet.Cells.MaxColumn + 1);
 
             var destRange = destSheet.Cells.CreateRange(0, 0, mergedSheet.Cells.MaxRow, mergedSheet.Cells.MaxColumn + 1);

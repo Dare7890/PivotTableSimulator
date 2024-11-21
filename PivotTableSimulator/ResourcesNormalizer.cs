@@ -4,8 +4,6 @@ namespace PivotTableSimulator
 {
     public static class ResourcesNormalizer
     {
-        private const string _resultSheetName = "Sheet1";
-
         public static void Normalize()
         {
             NormalizeFile();
@@ -14,10 +12,10 @@ namespace PivotTableSimulator
 
         private static void NormalizeFile()
         {
-            var wb = new Workbook(Constants.pivotTableFilePath);
+            var wb = new Workbook(Constants.PIVOT_TABLE_FILE_PATH);
 
             var deletedSheetIndexes = wb.Worksheets
-                .Where(w => w.Name != _resultSheetName)
+                .Where(w => w.Name != Constants.RESULT_SHEET_NAME)
                 .Select(w => w.Index)
                 .ToList();
 
@@ -26,12 +24,12 @@ namespace PivotTableSimulator
                 wb.Worksheets.RemoveAt(deletedSheetIndexes[i]);
             }
 
-            wb.Save(Constants.pivotTableFilePath);
+            wb.Save(Constants.PIVOT_TABLE_FILE_PATH);
         }
 
         private static void NormalizeFolder()
         {
-            File.Delete(Constants.mergedFilePath);
+            File.Delete(Constants.MERGED_FILE_PATH);
         }
     }
 }

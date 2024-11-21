@@ -9,8 +9,10 @@ namespace PivotTableSimulator
 
         public static void CreateTable(int metaColumnsRawsAmount, int headerRawsAmount)
         {
-            var wb = new Workbook(Constants.mergedFilePath);
+            var wb = new Workbook(Constants.MERGED_FILE_PATH);
             var pivotTableSheet = wb.Worksheets[0];
+            pivotTableSheet.Name = Constants.RESULT_SHEET_NAME;
+
             var sheet = wb.Worksheets[1];
             var mergedAreasList = sheet.Cells.GetMergedAreas();
             Aspose.Cells.Range range = sheet.Cells.CreateRange(headerRawsAmount - 1, 0, sheet.Cells.MaxRow + (headerRawsAmount - 1), sheet.Cells.MaxColumn + 1);
@@ -44,7 +46,7 @@ namespace PivotTableSimulator
             pivotTable.RefreshData();
             pivotTable.CalculateData();
 
-            wb.Save(Constants.pivotTableFilePath);
+            wb.Save(Constants.PIVOT_TABLE_FILE_PATH);
         }
 
         private static void UnionSeveralCells(Worksheet sheet, CellArea[] mergedAreas)

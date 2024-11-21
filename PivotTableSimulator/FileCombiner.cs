@@ -5,13 +5,13 @@
         private static readonly string _filesExtension = "*.xlsx";
         private static readonly IReadOnlyCollection<string> _ignoreFileNames =
         [
-            Constants.mergedFilePath,
-            Constants.pivotTableFilePath
+            Constants.MERGED_FILE_PATH,
+            Constants.PIVOT_TABLE_FILE_PATH
         ];
 
         public static void Combine(int headerRawsAmount)
         {
-            var books = Directory.GetFiles(Constants.filesFolderPath, _filesExtension, SearchOption.TopDirectoryOnly)
+            var books = Directory.GetFiles(Constants.FILES_FOLDER_PATH, _filesExtension, SearchOption.TopDirectoryOnly)
                 .Where(f => !_ignoreFileNames.Contains(f))
                 .Select(f => new Aspose.Cells.Workbook(f))
                 .ToArray();
@@ -47,7 +47,7 @@
                 }
             }
 
-            resultBook.Save(Constants.mergedFilePath);
+            resultBook.Save(Constants.MERGED_FILE_PATH);
         }
     }
 }
